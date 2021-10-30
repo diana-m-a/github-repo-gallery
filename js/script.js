@@ -2,6 +2,8 @@
 const overview = document.querySelector(".overview");
 // My github username
 const username = "diana-m-a";
+// Unordered list used to display repo list
+const repoList = document.querySelector(".repo-list");
 
 const getProfile = async function () {
     const profile = await fetch(`https://api.github.com/users/${username}`);
@@ -25,3 +27,21 @@ const displayProfile = function (data) {
   </div>`;
   overview.append(userInfoDiv);
 };
+
+const getRepos = async function () {
+    const repos = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`);
+    const data = await repos.json();
+    console.log(data);
+    displayRepoInfo(data);
+}
+
+getRepos();
+
+const displayRepoInfo = function (repos) {
+    for (let repo of repos) {
+        let li = document.createElement("li");
+        li.classList.add("repo");
+        li.innerHTML = `<h3>${repo.name}</h3>`;
+        repoList.append(li);
+    }
+}
